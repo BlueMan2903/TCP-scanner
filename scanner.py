@@ -19,9 +19,8 @@ if __name__ == '__main__':  #if the program is ran as the main program and not i
             s.connect((args.host, int(port)))
             print("port {}/tcp is OPEN.".format(port), end="\t\t")
             if port == "80":
-                s.send(b"HEAD / HTTP/1.0\r\n\r\n")
+                s.send(b"HEAD / HTTP/1.0\r\n\r\n") #an HTTPS requests must end with \r\n\r\n
                 output = str(s.recv(85))
-                #print("HTTP " + output[60:].strip("\\rn'"))
                 print(output.strip("bc'rn\\"))
             else:
                 output = str(s.recv(85))
