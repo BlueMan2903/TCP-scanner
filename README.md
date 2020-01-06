@@ -1,2 +1,2 @@
 # TCP-scanner
-python TCP scanner
+A simple python TCP scanner
