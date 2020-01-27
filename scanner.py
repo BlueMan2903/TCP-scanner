@@ -1,3 +1,4 @@
+import threading
 import argparse
 import socket
 
@@ -16,15 +17,19 @@ if __name__ == '__main__':  #if the program is ran as the main program and not i
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(5)
-            s.connect((args.host, int(port)))
+            #s.connect((args.host, int(port)))
+            t = threading.Thread(target = s.connect((args.host, int(port))))
+            t.start()
             print("port {}/tcp is OPEN.".format(port), end="\t\t")
             if port == "80":
                 s.send(b"HEAD / HTTP/1.0\r\n\r\n") #an HTTPS requests must end with \r\n\r\n
                 output = str(s.recv(85))
-                print(output.strip("bc'rn\\"))
+                output = output.split(" ")
+                print(output[-2] + " " + output[-1].strip(r"\r\n'"))
             else:
                 output = str(s.recv(85))
                 print(output.strip("b'nr\\"))
+            t.join()
             s.close()
         except Exception as e:
             if str(e) == "timed out":
